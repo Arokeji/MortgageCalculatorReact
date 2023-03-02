@@ -1,11 +1,9 @@
 import './Field.scss';
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-const Field = ({ initialAmount, stepsAmount, labelText, ref }) => {
+const Field = forwardRef(({ initialAmount, stepsAmount, labelText}, ref) => {
 
     const [amount, setAmount] = React.useState(initialAmount);
-
-    const currentAmount = React.useRef(null);
 
     const amountDecrement = () => {
         setAmount(amount - stepsAmount);
@@ -17,21 +15,21 @@ const Field = ({ initialAmount, stepsAmount, labelText, ref }) => {
 
     React.useEffect(() => {
         Number.isInteger(initialAmount) ? 
-            currentAmount.current.value = amount : 
-            currentAmount.current.value = (Math.round(amount * 100) / 100).toFixed(2);
-    }, [amount, initialAmount]);
+            ref.current.value = amount : 
+            ref.current.value = (Math.round(amount * 100) / 100).toFixed(2);
+    }, [amount, initialAmount, ref]);
 
     return (
 
         <label>{ labelText }
             <div>
                 <button onClick={amountDecrement}>-</button>
-                <input type='number' ref={ currentAmount } defaultValue={ initialAmount } step={1000} />
+                <input type='number' ref={ ref } defaultValue={ initialAmount } step={1000} />
                 <button onClick={amountIncrement}>+</button>
             </div>
         </label>
 
     );
-}
+});
 
 export default Field;
